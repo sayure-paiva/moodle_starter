@@ -1,0 +1,310 @@
+{{!
+This file is part of Moodle - http://moodle.org/
+
+Moodle is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Moodle is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Moodle. If not, see
+<http: //www.gnu.org/licenses />.
+}}
+{{!
+@template theme_boost/drawers
+
+Boost drawer template.
+
+Context variables required for this template:
+* sitename - The name of the site
+* output - The core renderer for the page
+* bodyattributes - attributes for the body tag as a string of html attributes
+* sidepreblocks - HTML for the blocks
+* hasblocks - true if there are blocks on this page
+* courseindexopen - true if the nav drawer should be open on page load
+* regionmainsettingsmenu - HTML for the region main settings menu
+* hasregionmainsettingsmenu - There is a region main settings menu on this page.
+
+Example context (json):
+{
+"sitename": "Moodle",
+"output": {
+"doctype": "
+<!DOCTYPE html>",
+"page_title": "Test page",
+"favicon": "favicon.ico",
+"main_content": "<h1>Headings make html validators happier</h1>"
+},
+"bodyattributes":"",
+"sidepreblocks": "<h2>Blocks html goes here</h2>",
+"hasblocks":true,
+"courseindexopen": true,
+"navdraweropen": false,
+"blockdraweropen": true,
+"regionmainsettingsmenu": "",
+"hasregionmainsettingsmenu": false,
+"addblockbutton": ""
+}
+}}
+{{> theme_boost/head }}
+
+<body {{{ bodyattributes }}} {{^config.is_admin}}style="background:#07151A; color:#FFF;" {{/config.is_admin}}>
+
+
+
+    {{> core/local/toast/wrapper}}
+    <div id="page-wrapper" class="d-print-block w-100">
+
+        {{{ output.standard_top_of_body_html }}}
+
+        {{> theme_boost/navbar }}
+        {{#courseindex}}
+        {{< theme_boost/drawer }} {{$id}}theme_boost-drawers-courseindex{{/id}} {{$drawerclasses}}drawer drawer-left
+            {{#courseindexopen}}show{{/courseindexopen}}{{/drawerclasses}} {{$drawercontent}} {{{courseindex}}}
+            {{/drawercontent}} {{$drawerpreferencename}}drawer-open-index{{/drawerpreferencename}}
+            {{$drawerstate}}show-drawer-left{{/drawerstate}} {{$tooltipplacement}}right{{/tooltipplacement}}
+            {{$closebuttontext}}{{#str}}closecourseindex, core{{/str}}{{/closebuttontext}} {{/ theme_boost/drawer}}
+            {{/courseindex}} {{#hasblocks}} {{< theme_boost/drawer }} {{$id}}theme_boost-drawers-blocks{{/id}}
+            {{$drawerclasses}}drawer drawer-right{{#blockdraweropen}} show{{/blockdraweropen}}{{/drawerclasses}}
+            {{$drawercontent}} <section class="d-print-none" aria-label="{{#str}}blocks{{/str}}">
+            {{{ addblockbutton }}}
+            {{{ sidepreblocks }}}
+            </section>
+            {{/drawercontent}}
+            {{$drawerpreferencename}}drawer-open-block{{/drawerpreferencename}}
+            {{$forceopen}}{{#forceblockdraweropen}}1{{/forceblockdraweropen}}{{/forceopen}}
+            {{$drawerstate}}show-drawer-right{{/drawerstate}}
+            {{$tooltipplacement}}left{{/tooltipplacement}}
+            {{$drawercloseonresize}}1{{/drawercloseonresize}}
+            {{$closebuttontext}}{{#str}}closeblockdrawer, core{{/str}}{{/closebuttontext}}
+            {{/ theme_boost/drawer}}
+            {{/hasblocks}}
+            <div class="{{#config.class_w100}}w-100 mt-0{{/config.class_w100}} 
+                            {{^config.class_w100}} drawers {{#courseindexopen}}show-drawer-left{{/courseindexopen}} {{#blockdraweropen}}show-drawer-right{{/blockdraweropen}} drag-container {{/config.class_w100}}"
+                id="page"
+                data-region="mainpage" data-usertour="scroller">
+
+                <div id="topofscroll" class="main-inner {{#config.is_admin}}main-inner-admin{{/config.is_admin}}">
+
+                    {{^config.logado}}
+                    <div class="area-banner">
+                        <div class="success-banner">
+                            <div class="frame14">
+                                <div class="profile-2user">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12.2134 15.4934C12.1734 15.4934 12.1467 15.4934 12.1067 15.4934C12.0401 15.4801 11.9467 15.4801 11.8667 15.4934C8.00008 15.3734 5.08008 12.3334 5.08008 8.58675C5.08008 4.77341 8.18674 1.66675 12.0001 1.66675C15.8134 1.66675 18.9201 4.77341 18.9201 8.58675C18.9067 12.3334 15.9734 15.3734 12.2534 15.4934C12.2401 15.4934 12.2267 15.4934 12.2134 15.4934ZM12.0001 3.66675C9.29341 3.66675 7.08008 5.88008 7.08008 8.58675C7.08008 11.2534 9.16008 13.4001 11.8134 13.4934C11.8934 13.4801 12.0667 13.4801 12.2401 13.4934C14.8534 13.3734 16.9067 11.2267 16.9201 8.58675C16.9201 5.88008 14.7067 3.66675 12.0001 3.66675Z"
+                                            fill="#FFEC80" />
+                                        <path
+                                            d="M22.0532 15.6666C22.0132 15.6666 21.9732 15.6666 21.9332 15.6533C21.3865 15.7066 20.8265 15.3199 20.7732 14.7733C20.7198 14.2266 21.0532 13.7333 21.5998 13.6666C21.7598 13.6533 21.9332 13.6533 22.0798 13.6533C24.0265 13.5466 25.5465 11.9466 25.5465 9.98659C25.5465 7.95992 23.9065 6.31992 21.8798 6.31992C21.3332 6.33325 20.8798 5.87992 20.8798 5.33325C20.8798 4.78659 21.3332 4.33325 21.8798 4.33325C24.9998 4.33325 27.5465 6.87992 27.5465 9.99992C27.5465 13.0666 25.1465 15.5466 22.0932 15.6666C22.0798 15.6666 22.0665 15.6666 22.0532 15.6666Z"
+                                            fill="#FFEC80" />
+                                        <path
+                                            d="M12.2261 30.0666C9.61281 30.0666 6.98615 29.3999 4.99948 28.0666C3.14615 26.8399 2.13281 25.1599 2.13281 23.3333C2.13281 21.5066 3.14615 19.8133 4.99948 18.5733C8.99948 15.9199 15.4795 15.9199 19.4528 18.5733C21.2928 19.7999 22.3195 21.4799 22.3195 23.3066C22.3195 25.1333 21.3061 26.8266 19.4528 28.0666C17.4528 29.3999 14.8395 30.0666 12.2261 30.0666ZM6.10615 20.2533C4.82615 21.1066 4.13281 22.1999 4.13281 23.3466C4.13281 24.4799 4.83948 25.5732 6.10615 26.4132C9.42615 28.6399 15.0261 28.6399 18.3461 26.4132C19.6261 25.5599 20.3195 24.4666 20.3195 23.3199C20.3195 22.1866 19.6128 21.0933 18.3461 20.2533C15.0261 18.0399 9.42615 18.0399 6.10615 20.2533Z"
+                                            fill="#FFEC80" />
+                                        <path
+                                            d="M24.4536 27.6667C23.9869 27.6667 23.5736 27.3467 23.4802 26.8667C23.3736 26.32 23.7202 25.8 24.2536 25.68C25.0936 25.5067 25.8669 25.1734 26.4669 24.7067C27.2269 24.1334 27.6402 23.4134 27.6402 22.6534C27.6402 21.8934 27.2269 21.1734 26.4802 20.6134C25.8936 20.16 25.1602 19.84 24.2936 19.64C23.7602 19.52 23.4136 18.9867 23.5336 18.44C23.6536 17.9067 24.1869 17.56 24.7336 17.68C25.8802 17.9334 26.8802 18.3867 27.6936 19.0134C28.9336 19.9467 29.6402 21.2667 29.6402 22.6534C29.6402 24.04 28.9202 25.36 27.6802 26.3067C26.8536 26.9467 25.8136 27.4134 24.6669 27.64C24.5869 27.6667 24.5202 27.6667 24.4536 27.6667Z"
+                                            fill="#FFEC80" />
+                                    </svg>
+                                </div>
+                                <div class="success-banner-titulo">Bem- vindo(a)</div>
+                                <div class="success-banner-desc">
+                                    Para acessar nossos cursos, você deverá realizar login. Caso não tenha acesso,
+                                    visite o site da <a class="success-banner-desc-soul"
+                                        href="https://soulcode.com/assinatura-cursos-online">SoulCode</a> para
+                                    realizar sua assinatura.
+                                </div>
+                                <div class="success-banner-btn">
+                                    <a class="link-login" href="{{config.wwwroot}}/login/index.php">
+                                        <div>
+                                            <span class="success-banner-btn-text">Realizar login</span>
+                                            <svg class="success-banner-btn-icon" width="20" height="20"
+                                                viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <mask id="mask0_4368_18208" style="mask-type:luminance"
+                                                    maskUnits="userSpaceOnUse" x="3" y="4" width="14" height="12">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M4.16732 10.8334H14.0548L11.0273 14.4667C10.7323 14.8201 10.7807 15.3459 11.134 15.6401C11.4882 15.9351 12.0132 15.8867 12.3082 15.5334L16.4748 10.5334C16.5073 10.4942 16.5232 10.4484 16.5473 10.4051C16.5673 10.3701 16.5915 10.3401 16.6065 10.3017C16.644 10.2059 16.6665 10.1051 16.6665 10.0034C16.6665 10.0026 16.6673 10.0009 16.6673 10.0001C16.6673 9.99925 16.6665 9.99758 16.6665 9.99675C16.6665 9.89508 16.644 9.79425 16.6065 9.69841C16.5915 9.66008 16.5673 9.63008 16.5473 9.59508C16.5232 9.55175 16.5073 9.50592 16.4748 9.46675L12.3082 4.46675C12.1423 4.26925 11.9057 4.16675 11.6673 4.16675C11.479 4.16675 11.2898 4.23008 11.134 4.36008C10.7807 4.65425 10.7323 5.18008 11.0273 5.53341L14.0548 9.16675H4.16732C3.70732 9.16675 3.33398 9.54008 3.33398 10.0001C3.33398 10.4601 3.70732 10.8334 4.16732 10.8334Z"
+                                                        fill="white" />
+                                                </mask>
+                                                <g mask="url(#mask0_4368_18208)">
+                                                    <rect width="20" height="20" fill="#0D1C2E" />
+                                                </g>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <img class="frame15"
+                                    src="https://storage.googleapis.com/bucket-moodle-tech/teste/banner-success.png"
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
+                    {{/config.logado}}
+
+                    {{#config.logado}}
+                    <div class="drawer-toggles d-flex">
+                        {{#courseindex}}
+                        <div class="drawer-toggler drawer-left-toggle open-nav d-print-none">
+                            <button
+                                class="btn icon-no-margin {{^config.is_admin}}icon-no-margin-estudante-left{{/config.is_admin}}"
+                                data-toggler="drawers" data-action="toggle"
+                                data-target="theme_boost-drawers-courseindex" data-toggle="tooltip"
+                                data-placement="right" title="{{#str}}opendrawerindex, core{{/str}}">
+                                <span class="sr-only">{{#str}}opendrawerindex, core{{/str}}</span>
+                                {{#pix}} t/index_drawer, moodle {{/pix}}
+                            </button>
+                        </div>
+                        {{/courseindex}}
+                        {{#hasblocks}}
+                        <div class="drawer-toggler drawer-right-toggle ml-auto d-print-none">
+                            <button
+                                class="btn icon-no-margin {{^config.is_admin}}icon-no-margin-estudante-right{{/config.is_admin}}"
+                                data-toggler="drawers" data-action="toggle" data-target="theme_boost-drawers-blocks"
+                                data-toggle="tooltip" data-placement="right"
+                                title="{{#str}}opendrawerblocks, core{{/str}}">
+                                <span class="sr-only">{{#str}}opendrawerblocks, core{{/str}}</span>
+                                <span class="dir-rtl-hide">{{#pix}}t/blocks_drawer, core{{/pix}}</span>
+                                <span class="dir-ltr-hide">{{#pix}}t/blocks_drawer_rtl, core{{/pix}}</span>
+                            </button>
+                        </div>
+                        {{/hasblocks}}
+                    </div>
+                    {{/config.logado}}
+
+                    {{{ output.full_header }}}
+                    {{#secondarymoremenu}}
+                    <div class="secondary-navigation d-print-none">
+                        {{> core/moremenu}}
+                    </div>
+                    {{/secondarymoremenu}}
+                    <div id="page-content" class="pb-3 d-print-block">
+                        <div id="region-main-box">
+                            {{#hasregionmainsettingsmenu}}
+                            <div id="region-main-settings-menu" class="d-print-none">
+                                <div> {{{ regionmainsettingsmenu }}} </div>
+                            </div>
+                            {{/hasregionmainsettingsmenu}}
+                            <section id="region-main" class="region-main {{#config.is_admin}}region-main-admin{{/config.is_admin}}"
+                             aria-label="{{#str}}content{{/str}}">
+
+                             {{#config.nome_curso}}<h4 class="titulo-curso-estudante">{{{config.nome_curso}}}</h4>{{/config.nome_curso}}
+                             
+                                {{#hasregionmainsettingsmenu}}
+                                <div class="region_main_settings_menu_proxy"></div>
+                                {{/hasregionmainsettingsmenu}}
+                                {{{ output.course_content_header }}}
+                                {{#headercontent}}
+                                {{> core/activity_header }}
+                                {{/headercontent}}
+                                {{#overflow}}
+                                <div class="container-fluid tertiary-navigation">
+                                    <div class="navitem">
+                                        {{> core/url_select}}
+                                    </div>
+                                </div>
+                                {{/overflow}}
+                                {{{ output.main_content }}}
+                                {{{ output.activity_navigation }}}
+                                {{{ output.course_content_footer }}}
+
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                {{> theme_boost/footer }}
+            </div>
+            {{{ output.standard_after_main_region_html }}}
+    </div>
+
+</body>
+
+</html>
+{{#js}}
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader', 'theme_boost/drawer'], function(Loader, Drawer) {
+Drawer.init();
+M.util.js_complete('theme_boost/loader');
+});
+{{/js}}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function updateCounter(enddate, diasDiv, horasDiv, minutosDiv, segundosDiv) {
+            var currentTimestamp = Math.floor(Date.now() / 1000);
+            var enddate_ajustada = parseInt(enddate) + (4 * 60 * 60);
+            var dif_time = enddate_ajustada - currentTimestamp;
+
+            var days = Math.floor(dif_time / (60 * 60 * 24));
+            var hours = Math.floor((dif_time % (60 * 60 * 24)) / (60 * 60));
+            var minutes = Math.floor((dif_time % (60 * 60)) / 60);
+            var seconds = dif_time % 60;
+            
+            // Atualize os valores dos contadores individuais
+            diasDiv.text(days);
+            horasDiv.text(hours);
+            minutosDiv.text(minutes);
+            segundosDiv.text(seconds);
+
+            // Verifique se algum contador atingiu zero
+            if (dif_time <= 0) {
+                // Recarregue a página
+                location.reload();
+            }
+        }
+    
+        // Encontre as divs que contêm a data final e os elementos dos contadores
+        $(".category-card").each(function() {
+            var enddate = $(this).data("enddate");
+            var diasDiv = $(this).find(".contador-num#contador-dias");
+            var horasDiv = $(this).find(".contador-num#contador-horas");
+            var minutosDiv = $(this).find(".contador-num#contador-minutos");
+            var segundosDiv = $(this).find(".contador-num#contador-segundos");
+            
+            // Atualize os contadores iniciais
+            updateCounter(enddate, diasDiv, horasDiv, minutosDiv, segundosDiv);
+        });
+    
+        // Atualize os contadores a cada 1 segundo (1000 milissegundos)
+        setInterval(function() {
+            $(".category-card").each(function() {
+                var enddate = $(this).data("enddate");
+                var diasDiv = $(this).find(".contador-num#contador-dias");
+                var horasDiv = $(this).find(".contador-num#contador-horas");
+                var minutosDiv = $(this).find(".contador-num#contador-minutos");
+                var segundosDiv = $(this).find(".contador-num#contador-segundos");
+                
+                // Atualize os contadores
+                updateCounter(enddate, diasDiv, horasDiv, minutosDiv, segundosDiv);
+            });
+        }, 1000);
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var profileCourses = document.querySelectorAll(".my-profile-course");
+    
+    profileCourses.forEach(function (course) {
+        var links = course.querySelectorAll("a");
+
+        links.forEach(function (link) {
+            var originalUrl = link.getAttribute("href");
+            var userIdParam = originalUrl.match(/user\/view.php\?id=(\d+)/);
+            var courseIdParam = originalUrl.match(/&course=(\d+)/);
+
+            if (courseIdParam && courseIdParam.length >= 2) {
+                var modifiedUrl = originalUrl.replace(userIdParam[0], '').replace(courseIdParam[0], 'course/view.php?id=' + courseIdParam[1]);
+                link.setAttribute("href", modifiedUrl);
+            }
+        });
+    });
+});
+</script>

@@ -1,0 +1,223 @@
+{{!
+This file is part of Moodle - http://moodle.org/
+
+Moodle is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Moodle is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Moodle. If not, see
+<http: //www.gnu.org/licenses />.
+}}
+{{!
+@template core/loginform
+
+Moodle template for the login page.
+
+Context variables required for this template:
+* autofocusform: Auto focus on form ?,
+* canloginasguest - Is guest login allowed?,
+* canloginbyemail - Is login by email allowed?,
+* cansignup - Signup allowed?,
+* cookieshelpicon - cookies help icon details
+* error - Any errors in the form?,
+* forgotpasswordurl - Forgot password url,
+* hasidentityproviders - Flag, set to true to hide identity providers,
+* hasinstructions - Flag, set to true to show instructions,
+* identityproviders - List of identiy providers,
+* instructions - Instructions,
+* instructionsformat - Format of instructions,
+* loginurl - Login url,
+* signupurl - Signup url,
+* errorformatted - Formatted error,
+* logourl - Flag, logo url,
+* sitename - Name of site.,
+* logintoken - Random token to protect login request.,
+* maintenance - Maintenance message
+
+Example context (json):
+{
+"autofocusform": false,
+"canloginasguest": "1",
+"canloginbyemail": false,
+"cansignup": true,
+"cookieshelpicon": {
+"heading": "Cookies must be enabled in your browser",
+"text": "<div class=\"no-overflow\">Two cookies are used on this site. Both died..</div>",
+"icon": {
+"attributes": [
+{
+"name": "class",
+"value": "iconhelp"
+},
+{
+"name": "alt",
+"value": "Help with Cookies must be enabled in your browser"
+},
+{
+"name": "title",
+"value": "Help with Cookies must be enabled in your browser"
+},
+{
+"name": "src",
+"value": "http://localhost/stable_master/theme/image.php?theme=boost&component=core&image=help"
+}
+]
+},
+"linktext": null,
+"title": "Help with Cookies must be enabled in your browser",
+"url": "http://localhost/stable_master/help.php?component=core&identifier=cookiesenabled&lang=en",
+"ltr": true
+},
+"error": "",
+"forgotpasswordurl": "http://localhost/stable_master/login/forgot_password.php",
+"hasidentityproviders": false,
+"hasinstructions": true,
+"identityproviders": [],
+"instructions": "For full access to this site, you first need to create an account.",
+"instructionsformat": "1",
+"loginurl": "http://localhost/stable_master/login/index.php",
+"signupurl": "http://localhost/stable_master/login/signup.php",
+"cookieshelpiconformatted": "",
+"errorformatted": "",
+"logourl": false,
+"sitename": "Beer & Chips",
+"logintoken": "randomstring",
+"maintenance": "For full access to this site, you need to login in as an admin.",
+"languagemenu": "Choose language"
+}
+}}
+
+<div class="loginform">
+
+    {{#maintenance}}
+    <div class="alert alert-danger login-maintenance">
+        {{{maintenance}}}
+    </div>
+    {{/maintenance}}
+    {{#error}}
+    <a href="#" id="loginerrormessage" class="sr-only">{{error}}</a>
+    <div class="alert alert-danger" role="alert">{{error}}</div>
+    {{/error}}
+    {{#cansignup}}
+    <a href="{{signupurl}}" class="sr-only">{{#str}} tocreatenewaccount {{/str}}</a>
+    {{/cansignup}}
+    <form class="login-form" action="{{loginurl}}" method="post" id="login">
+        <input type="hidden" name="logintoken" value="{{logintoken}}">
+        <div class="login-form-username form-group">
+            <label for="username" class="sr-only">
+                {{^canloginbyemail}}
+                {{#str}} username {{/str}}
+                {{/canloginbyemail}}
+                {{#canloginbyemail}}
+                {{#str}} usernameemail {{/str}}
+                {{/canloginbyemail}}
+            </label>
+            <input type="text" name="username" id="username" {{! !}}class="form-login-input form-control-lg" {{!
+                !}}value="{{username}}" {{! !}}placeholder="Email" {{! !}}autocomplete="username">
+        </div>
+        <div class="login-form-password form-group">
+            <label for="password" class="sr-only">{{#str}} password {{/str}}</label>
+            <input type="password" name="password" id="password" value="" {{!
+                !}}class="form-login-input form-control-lg" {{! !}}placeholder="{{#cleanstr}}password{{/cleanstr}}" {{!
+                !}}autocomplete="current-password">
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="login-form-submit form-group">
+                <button class="btn form-login-btn-submmit btn-lg" type="submit" id="loginbtn">{{#str}}login{{/str}} <svg
+                        width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <mask id="mask0_4042_20915" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="3" y="4"
+                            width="14" height="12">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M4.26107 10.8334H14.1486L11.1211 14.4667C10.8261 14.8201 10.8744 15.3459 11.2277 15.6401C11.5819 15.9351 12.1069 15.8867 12.4019 15.5334L16.5686 10.5334C16.6011 10.4942 16.6169 10.4484 16.6411 10.4051C16.6611 10.3701 16.6852 10.3401 16.7002 10.3017C16.7377 10.2059 16.7602 10.1051 16.7602 10.0034C16.7602 10.0026 16.7611 10.0009 16.7611 10.0001C16.7611 9.99925 16.7602 9.99758 16.7602 9.99675C16.7602 9.89508 16.7377 9.79425 16.7002 9.69841C16.6852 9.66008 16.6611 9.63008 16.6411 9.59508C16.6169 9.55175 16.6011 9.50592 16.5686 9.46675L12.4019 4.46675C12.2361 4.26925 11.9994 4.16675 11.7611 4.16675C11.5727 4.16675 11.3836 4.23008 11.2277 4.36008C10.8744 4.65425 10.8261 5.18008 11.1211 5.53341L14.1486 9.16675H4.26107C3.80107 9.16675 3.42773 9.54008 3.42773 10.0001C3.42773 10.4601 3.80107 10.8334 4.26107 10.8334Z"
+                                fill="white" />
+                        </mask>
+                        <g mask="url(#mask0_4042_20915)">
+                            <rect x="0.09375" width="20" height="20" fill="#0D1C2E" />
+                        </g>
+                    </svg>
+                </button>
+            </div>
+            <div class="login-form-forgotpassword form-group">
+                <a href="{{forgotpasswordurl}}">{{#str}}forgotaccount{{/str}}</a>
+            </div>
+        </div>
+
+    </form>
+    {{#hasidentityproviders}}
+    <div class="login-divider"></div>
+    <div class="login-identityproviders">
+        <h2 class="login-heading">{{#str}} potentialidps, auth {{/str}}</h2>
+        {{#identityproviders}}
+        <a class="btn login-identityprovider-btn btn-block" href="{{url}}">
+            {{#iconurl}}
+            <img src="{{iconurl}}" alt="" width="24" height="24" />
+            {{/iconurl}}
+            {{name}}
+        </a>
+        {{/identityproviders}}
+    </div>
+    {{/hasidentityproviders}}
+    {{#hasinstructions}}
+    <div class="login-divider"></div>
+    <div class="login-instructions {{#cansignup}}mb-3{{/cansignup}}">
+        <h2 class="login-heading">{{#str}}firsttime{{/str}}</h2>
+        {{{instructions}}}
+    </div>
+    {{/hasinstructions}}
+    {{#cansignup}}
+    <div class="login-signup">
+        <a class="btn btn-secondary" href="{{signupurl}}">{{#str}}startsignup{{/str}}</a>
+    </div>
+    {{/cansignup}}
+    {{#canloginasguest}}
+    <div class="login-divider"></div>
+    <h2 class="login-heading">{{#str}}someallowguest{{/str}}</h2>
+    <form action="{{loginurl}}" method="post" id="guestlogin">
+        <input type="hidden" name="logintoken" value="{{logintoken}}">
+        <input type="hidden" name="username" value="guest" />
+        <input type="hidden" name="password" value="guest" />
+        <button class="btn btn-secondary" type="submit" id="loginguestbtn">{{#str}}loginguest{{/str}}</button>
+    </form>
+    {{/canloginasguest}}
+    <div class="login-divider"></div>
+    <div class="d-flex">
+        {{#languagemenu}}
+        <div class="login-languagemenu">
+            {{>core/action_menu}}
+        </div>
+        <div class="divider border-left align-self-center mx-3"></div>
+        {{/languagemenu}}
+        <button type="button" class="btn form-login-btn-cookies" {{! }} data-modal="alert" {{! }}
+            data-modal-title-str='["cookiesenabled", "core"]' {{! }}
+            data-modal-content-str='["cookiesenabled_help_html", "core"]' {{! }}>{{#str}}cookiesnotice{{/str}}</button>
+    </div>
+</div>
+
+{{#js}}
+{{^error}}
+{{#autofocusform}}
+var userNameField = document.getElementById('username');
+if (userNameField.value.length == 0) {
+userNameField.focus();
+} else {
+document.getElementById('password').focus();
+}
+{{/autofocusform}}
+{{/error}}
+{{#error}}
+document.getElementById('loginerrormessage').focus();
+{{/error}}
+require(['core_form/submit'], function(Submit) {
+Submit.init("loginbtn");
+{{#canloginasguest}}
+Submit.init("loginguestbtn");
+{{/canloginasguest}}
+});
+{{/js}}

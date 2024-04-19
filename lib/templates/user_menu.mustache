@@ -1,0 +1,140 @@
+{{!
+This file is part of Moodle - http://moodle.org/
+
+Moodle is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Moodle is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Moodle. If not, see
+<http: //www.gnu.org/licenses />.
+}}
+{{!
+@template core/user_menu
+
+Action link template.
+
+Context variables required for this template:
+* unauthenticateduseruser - (Optional) Items to be displayed if an an unautheticated user is accessing the site
+* content - The content to be displayed in the header.
+* url - The login url
+* items - Array of user menu items used in user_action_menu_items. Required if the above not provided.
+* metadata - Array of additional metadata to be displayed in the dropdown button.
+* avatardata - Array of avatars to be displayed. Usually only the current user's avatar. If viewing as another user,
+includes that user's avatar.
+* userfullname - The name of the logged in user
+* submenus - Array of submenus within the user menu.
+* id - The id of the submenu.
+* title - The title of the submenu.
+* items - Array of the submenu items used in core/user_action_menu_submenu_items.
+
+Example context (json):
+{
+"unauthenticateduser": {
+"content": "You are not logged in",
+"url": "https://yourmoodlesite/login/index.php"
+},
+"items": [],
+"metadata": [],
+"avatardata": [],
+"userfullname": "Admin User",
+"submenus": [
+{
+"id": "86cebd87",
+"title": "Submenu title",
+"items": []
+}
+]
+}
+}}
+<div class="usermenu">
+    {{#unauthenticateduser}}
+    <span class="login pl-2">
+        {{#guest}}
+        {{#str}} loggedinasguest, core {{/str}}
+        <div class="divider border-left h-75 align-self-center mx-2"></div>
+        {{/guest}}
+        {{#url}}
+        <!-- <a href="{{url}}">{{#str}} login, core {{/str}}</a> -->
+        
+        {{/url}}
+    </span>
+    {{/unauthenticateduser}}
+    {{^unauthenticateduser}}
+    <div class="dropdown">
+        <a href="#" role="button" id="user-menu-toggle" data-toggle="dropdown" aria-label="{{#str}}usermenu{{/str}}"
+            aria-haspopup="true" aria-controls="user-action-menu"
+            class="btn dropdown-toggle {{^config.is_admin}}nav-menu-user-btn{{/config.is_admin}}">
+            <span class="userbutton">
+                {{> core/user_menu_metadata }}
+            </span>
+            <span
+                class="{{#config.is_admin}}nav-msg-admin{{/config.is_admin}}{{^config.is_admin}}nav-msg-estudantes{{/config.is_admin}}">Olá,
+                {{config.firstname}}</span>
+
+        </a>
+        <div id="menu-soulcode" class="drop-usuario-container">
+            <div class="drop-usuario-svg d-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="7" viewBox="0 0 29 7" fill="none">
+                    <path d="M14.9531 0L28.9531 7H0.953125L14.9531 0Z" fill="#0E2931" />
+                </svg>
+            </div>
+            <div class="drop-usuario">
+                <div class="drop-usuario-links">
+                    <div class="drop-usuario-link">
+                        <div class="drop-usuario-link-text">
+                            <a class="drop-usuario-link-text" href="{{config.homeurl}}user/profile.php"><i
+                                    class="bi bi-file-earmark-text mr-2"></i>Minha Conta</a>
+                        </div>
+                    </div>
+                    <div class="drop-usuario-link">
+                        <div class="drop-usuario-link-text">
+                            <a class="drop-usuario-link-text" href="https://soulcode.com/suporte"><i
+                                    class="bi bi-headset mr-2"></i>Suporte</a>
+                        </div>
+                    </div>
+                    <div class="drop-usuario-link">
+                        <div class="drop-usuario-link-text">
+                            <a class="drop-usuario-link-text" href="https://discord.gg/UWr6NT9kJN"><i
+                                    class="bi bi-discord mr-2"></i>Comunidade</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="drop-usuario-button">
+                    <a class="user-menu-link"
+                        href="{{globals.config.wwwroot}}/login/logout.php?sesskey={{globals.config.sesskey}}">
+                        <div class="drop-usuario-button-text">Sair<i class="bi-box-arrow-right ml-2"></i></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </div>
+    {{/unauthenticateduser}}
+</div>
+{{#js}}
+require(['core/usermenu'], function(UserMenu) {
+UserMenu.init();
+});
+{{/js}}
+
+<script>
+    $(document).ready(function () {
+        // Esconde o menu suspenso inicialmente (display: none)
+        $("#menu-soulcode").hide();
+
+        // Define o evento de clique no ícone "user-menu-toggle"
+        $("#user-menu-toggle").click(function (event) {
+            event.preventDefault();
+
+            // Alterna a exibição do menu suspenso
+            $("#menu-soulcode").toggle();
+        });
+    });
+</script>
